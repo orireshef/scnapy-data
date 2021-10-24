@@ -1,30 +1,24 @@
 import os
 import abc
-from configobj import ConfigObj
 
-class IScConfig():
+
+class IScStep():
     """
     An interface for scanpy steps configurations
     """
 
+    _done = False
+    
     @abc.abstractstaticmethod
     def get_seurat_defaults():
         pass
-
-    @staticmethod
-    def read_cfg_file(path: str, step: str) -> dict:
-        try:
-            assert os.path.isfile(path)
-            config_obj = ConfigObj(path)
-            return config_obj[step]
-        except Exception as e:
-            print(f"""
-            Could not read config from file in {path}.
-            Make sure the file and the step are defined correctly.
-            """)
+    
+    @abc.abstractmethod
+    def run(self, **kwargs):
+        pass
 
             
-class PpConfig(IScConfig):
+class PpStep(IScStep):
     """
     Preprocessing step configurations
     """
